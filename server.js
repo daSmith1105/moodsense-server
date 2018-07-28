@@ -1,6 +1,7 @@
 'use strict';
 require('dotenv').config();
 const express = require('express');
+var bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
@@ -29,12 +30,15 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
-app.use('/api', apiRouter)
+app.use('/api/', apiRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
