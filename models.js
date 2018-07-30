@@ -44,14 +44,13 @@ userSchema.statics.hashPassword = function(password) {
 
 
 const moodEntrySchema = mongoose.Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    user: { type: String},
     created: { type: Date, default: Date.now },
     note: { type: String },
     moods: [{ type: Schema.Types.ObjectId, ref: 'Mood' }]
   });
 
 const moodSchema = mongoose.Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
     created: {type: Date, default: Date.now},
     moodType: {type: String},
     intensity: {type: String},

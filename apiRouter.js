@@ -17,28 +17,13 @@ sample entry
 }
 */
 
-// return all mood entries
-router.get('/mood-entries', (req, res) => {
-
-    MoodEntry.find()
+// return all mood entries for logged in user
+router.get('/mood-entries/:user', (req, res) => {
+    MoodEntry.find(req.query.user)
       .populate('moods')
-      .populate('users')
       .then(entries => {
           res.json({ entries });
-      })
-      .catch(err => {
-          console.log(err);
-          res.status(500).json({message: 'Internal server error'});
-  });
-});
-
-
-// this will get one mood entry and populate it with all the moods associated with it.
-router.get('/mood-entries/:id', (req, res) => {
-    MoodEntry.findById(req.params.id)
-      .populate('moods')
-      .then(entry => {
-          res.json(entry);
+          console.log("Current entries: " + { entries })
       })
       .catch(err => {
           console.log(err);
@@ -63,7 +48,7 @@ router.post('/mood-entries', (req, res) => {
 
                     // create the mood entry
 
-                    MoodEntry.create({note: entry.note, moods: moodRecords})
+                    MoodEntry.create({user: entry.user, note: entry.note, moods: moodRecords})
                         .then(entryRecord => {
                             console.log(entryRecord);
                             return res.status(201).json(entryRecord);
