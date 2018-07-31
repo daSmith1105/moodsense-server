@@ -18,9 +18,10 @@ sample entry
 */
 
 // return all mood entries for logged in user
-router.get('/mood-entries/:user', (req, res) => {
-    MoodEntry.find(req.query.user)
+router.get('/mood-entries/:userId', (req, res) => {
+    MoodEntry.find({user: req.params.userId})
       .populate('moods')
+      .sort('-created')
       .then(entries => {
           res.json({ entries });
           console.log("Current entries: " + { entries })

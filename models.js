@@ -51,7 +51,6 @@ const moodEntrySchema = mongoose.Schema({
   });
 
 const moodSchema = mongoose.Schema({
-    created: {type: Date, default: Date.now},
     moodType: {type: String},
     intensity: {type: String},
   });
