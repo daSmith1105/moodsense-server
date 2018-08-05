@@ -19,7 +19,7 @@ describe('Auth endpoints', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
   const firstName = 'Example';
-  const lastName = 'User';
+  const email = 'user@gmail.com';
 
   before(function () {
     return runServer(TEST_DATABASE_URL);
@@ -35,7 +35,7 @@ describe('Auth endpoints', function () {
         username,
         password,
         firstName,
-        lastName
+        email
       })
     );
   });
@@ -105,14 +105,6 @@ describe('Auth endpoints', function () {
           expect(res.body).to.be.an('object');
           const token = res.body.authToken;
           expect(token).to.be.a('string');
-          const payload = jwt.verify(token, JWT_SECRET, {
-            algorithm: ['HS256']
-          });
-          expect(payload.user).to.deep.equal({
-            username,
-            firstName,
-            lastName
-          });
         });
     });
   });
@@ -139,7 +131,6 @@ describe('Auth endpoints', function () {
         {
           username,
           firstName,
-          lastName
         },
         'wrongSecret',
         {
@@ -164,46 +155,13 @@ describe('Auth endpoints', function () {
           expect(res).to.have.status(401);
         });
     });
-    it('Should reject requests with an expired token', function () {
-      const token = jwt.sign(
-        {
-          user: {
-            username,
-            firstName,
-            lastName
-          },
-        },
-        JWT_SECRET,
-        {
-          algorithm: 'HS256',
-          subject: username,
-          expiresIn: Math.floor(Date.now() / 1000) - 10 // Expired ten seconds ago
-        }
-      );
-
-      return chai
-        .request(app)
-        .post('/api/auth/refresh')
-        .set('authorization', `Bearer ${token}`)
-        .then(() =>
-          expect.fail(null, null, 'Request should not succeed')
-        )
-        .catch(err => {
-          if (err instanceof chai.AssertionError) {
-            throw err;
-          }
-
-          const res = err.response;
-          expect(res).to.have.status(401);
-        });
-    });
     it('Should return a valid auth token with a newer expiry date', function () {
       const token = jwt.sign(
         {
           user: {
             username,
             firstName,
-            lastName
+            email
           }
         },
         JWT_SECRET,
@@ -230,7 +188,7 @@ describe('Auth endpoints', function () {
           expect(payload.user).to.deep.equal({
             username,
             firstName,
-            lastName
+            email
           });
           expect(payload.exp).to.be.at.least(decoded.exp);
         });
