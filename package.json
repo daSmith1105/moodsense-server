@@ -1,7 +1,10 @@
 {
-    "name": "node-jwt-auth",
+    "name": "moodsense",
     "version": "1.0.0",
     "description": "",
+    "engines": {
+        "node": "10.9.0"
+      },
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
