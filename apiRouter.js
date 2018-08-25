@@ -14,6 +14,7 @@ sample entry
       {"moodType": "sad", "intensity": "3"}
     ],
     "note": "this is a sample note"
+    
 }
 */
 
