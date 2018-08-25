@@ -30,7 +30,7 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
+app.use('/auth/', authRouter);
 app.use('/api/', apiRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
